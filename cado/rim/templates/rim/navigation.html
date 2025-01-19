@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analyse Graphique</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'rim/css/navigation.css' %}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.0/nouislider.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.0/nouislider.min.js"></script>
+    
+    <script src="https://unpkg.com/feather-icons"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <!-- Barre de navigation -->
+    <nav class="pcoded-navbar">
+        <div class="navbar-wrapper">
+            <div class="navbar-brand header-logo">
+                <a target="_blank" class="b-brand">
+                    <img src="{% static 'rim/img/cadorim.jpeg' %}" alt="Analyse Graphique" style="width: 25px; height: auto;">
+                    <span class="b-title">Analyse Graphique</span>
+                </a>
+                
+            </div>
+            <div class="navbar-content scroll-div">
+                <ul class="nav pcoded-inner-navbar">
+                    <li class="nav-item pcoded-hasmenu">
+                        <a href="#" class="nav-link toggle-list">Choisissez une société</a>
+
+                        <ul class="pcoded-submenu" style="display: none;">
+
+
+
+                            <!-- Société Cadorim -->
+                            <li class="nav-item pcoded-hasmenu">
+                                <a href="#" class="nav-link toggle-list">Société Cadorim</a>
+                                <!-- Tableau Volume et Valeur -->
+                                <ul class="pcoded-submenu">
+                                    <li class="nav-item pcoded-hasmenu">
+                                        <a href="#" class="nav-link toggle-list" onclick="updateChartc('volume')">Tableau Volume</a>
+                                        <ul class="pcoded-submenu">
+                                            {% for column, data in volume_data.items %}
+                                                <li><a href="#" data-column="{{ column }}" onclick="updateChartc('volume', '{{ column }}')">{{ column }}</a></li>
+                                            {% endfor %}
+                                        </ul>
+                                    </li> 
+                                    <li class="nav-item pcoded-hasmenu">
+                                        <a href="#" class="nav-link toggle-list" onclick="updateChartc('valeur')">Tableau Valeur</a>
+                                        <ul class="pcoded-submenu">
+                                            {% for column, data in valeur_data.items %}
+                                                <li><a href="#" data-column="{{ column }}" onclick="updateChartc('valeur', '{{ column }}')">{{ column }}</a></li>
+                                            {% endfor %}
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </li>
+
+
+                            <!-- Société Mauri Pay -->
+                            <li class="nav-item pcoded-hasmenu">
+                                <a href="#" class="nav-link toggle-list">Société Mauri Pay </a>
+                                <!-- Tableau Volume et Valeur -->
+                                <ul class="pcoded-submenu">
+                                    <li class="nav-item pcoded-hasmenu">
+                                        <a href="#" class="nav-link toggle-list" onclick="updateChartm('volume')">Tableau Volume</a>
+                                        <ul class="pcoded-submenu">
+                                            {% for column, data in volumem_data.items %}
+                                                <li><a href="#" data-column="{{ column }}" onclick="updateChartm('volume', '{{ column }}')">{{ column }}</a></li>
+                                            {% endfor %}
+                                        </ul>
+                                    </li> 
+                                    <li class="nav-item pcoded-hasmenu">
+                                        <a href="#" class="nav-link toggle-list" onclick="updateChartm('valeur')">Tableau Valeur</a>
+                                        <ul class="pcoded-submenu">
+                                            {% for column, data in valeurm_data.items %}
+                                                <li><a href="#" data-column="{{ column }}" onclick="updateChartm('valeur', '{{ column }}')">{{ column }}</a></li>
+                                            {% endfor %}
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </li>
+
+
+
+                            <!-- Société Limara -->
+                            <li class="nav-item pcoded-hasmenu">
+                                <a href="#" class="nav-link toggle-list">Société Limara</a>
+                                <!-- Tableau Volume et Valeur -->
+                                <ul class="pcoded-submenu">
+                                    <li class="nav-item pcoded-hasmenu">
+                                        <a href="#" class="nav-link toggle-list" onclick="updateChartl('volume')">Tableau Volume</a>
+                                        <ul class="pcoded-submenu">
+                                            {% for column, data in volumel_data.items %}
+                                                <li><a href="#" data-column="{{ column }}" onclick="updateChartl('volume', '{{ column }}')">{{ column }}</a></li>
+                                            {% endfor %}
+                                        </ul>
+                                    </li> 
+                                    <li class="nav-item pcoded-hasmenu">
+                                        <a href="#" class="nav-link toggle-list" onclick="updateChartl('valeur')">Tableau Valeur</a>
+                                        <ul class="pcoded-submenu">
+                                            {% for column, data in valeurl_data.items %}
+                                                <li><a href="#" data-column="{{ column }}" onclick="updateChartl('valeur', '{{ column }}')">{{ column }}</a></li>
+                                            {% endfor %}
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </li>
+
+
+
+
+
+                        </ul>
+                    
+                    </li>
+
+
+
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div style="margin-left: 260px; padding: 20px;">
+        
+        <div style="margin-left: 260px; padding: 20px; display: flex; align-items: center;">
+            <form method="GET" style="margin-right: 20px;">
+                <label for="startMonth">Mois Début :</label>
+                <select id="startMonth" name="startMonth">
+                    {% for month in mois %}
+                        <option value="{{ month }}">{{ month }}</option>
+                    {% endfor %}
+                </select>
+        
+                <label for="endMonth">Mois Fin :</label>
+                <select id="endMonth" name="endMonth">
+                    {% for month in mois %}
+                        <option value="{{ month }}">{{ month }}</option>
+                    {% endfor %}
+                </select>
+        
+                <button type="submit" class="filter-button">Filtrer</button>
+            </form>
+        
+            <button id="lineChartButton" onclick="changeChartType('line')" class="chart-button">
+                <i class="fas fa-chart-line"></i>
+            </button>
+        
+            <button id="barChartButton" onclick="changeChartType('bar')" class="chart-button">
+                <i class="fas fa-chart-bar"></i>
+            </button>
+        
+            <button id="pieChartButton" onclick="changeChartType('pie')" class="chart-button">
+                <i class="fas fa-chart-pie"></i>
+            </button>
+        </div>
+        
+        
+
+        
+    
+        <div style="width: 80%; margin: auto;">
+            <canvas id="myChart" width="400" height="180"></canvas>
+        </div><br><br><br><br>
+
+        <footer>
+            &copy; 2025 Statistiques - Tous droits réservés.
+        </footer>
+
+    </div>
+
+
+    <script>
+
+
+
+        const mois = {{ mois|safe }};
+        const volumeData = {{ volume_data|safe }};
+        const valeurData = {{ valeur_data|safe }};
+        const volumemData = {{ volumem_data|safe }};
+        const valeurmData = {{ valeurm_data|safe }};
+        const volumelData = {{ volumel_data|safe }};        
+        const valeurlData = {{ valeurl_data|safe }};
+        
+        
+        // Définir l'objet graphique (initialement avec les données du volume)
+        const ctx = document.getElementById('myChart').getContext('2d');
+        const myChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: mois,
+                datasets: []
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                },
+                scales: {
+                    x: { beginAtZero: true },
+                    y: { beginAtZero: true },
+                },
+            }
+        });
+        
+
+
+    </script>
+    
+
+    <script src="{% static 'rim/js/navigation.js' %}"></script>
+</body>
+</html>
