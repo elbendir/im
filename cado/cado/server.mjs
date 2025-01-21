@@ -1,12 +1,17 @@
-import { createServer } from 'node:http';
+import { createServer } from 'http';
+import { parse } from 'url';
 
 const server = createServer((req, res) => {
-    res.writeHead(200, { 'Content-Type': 'text/plain' });
-    res.end('Hello World!\n');
+  const { pathname } = parse(req.url, true);
+  if (pathname === '/') {
+    res.writeHead(200, { 'Content-Type': 'text/html' });
+    res.end('<h1>Bienvenue sur mon site Vercel!</h1>');
+  } else {
+    res.writeHead(404, { 'Content-Type': 'text/html' });
+    res.end('<h1>Page not found</h1>');
+  }
 });
 
-// Utilisation de process.env.PORT pour fonctionner sur Vercel
-const PORT = process.env.PORT || 3000;
-server.listen(PORT, () => {
-    console.log(`Listening on port ${PORT}`);
+server.listen(3000, () => {
+  console.log('Server is running on http://localhost:3000');
 });
