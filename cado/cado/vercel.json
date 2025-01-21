@@ -9,5 +9,4 @@
     "routes": [
       { "src": "/(.*)", "dest": "server.mjs" }
     ]
-  }
-  
+}
