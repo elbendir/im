@@ -1,15 +1,13 @@
 {
     "version": 2,
     "builds": [
-        {
-            "src": "cado/wsgi.py",
-            "use": "@vercel/python"
-        }
+      {
+        "src": "server.mjs",
+        "use": "@vercel/node"
+      }
     ],
     "routes": [
-        {
-            "src": "/(.*)",
-            "dest": "cado/wsgi.py"
-        }
+      { "src": "/(.*)", "dest": "server.mjs" }
     ]
-}
+  }
+  
