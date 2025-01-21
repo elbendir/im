@@ -1,13 +1,20 @@
 {
-    "version": 2,
-    "builds": [
-      {
-        "src": "server.mjs",
-        "use": "@vercel/node"
-      }
-    ],
-    "routes": [
-      { "src": "/(.*)", "dest": "server.mjs" }
+    
+    "builds" : [{ 
+
+        "src" : "cado/wsgi.py",
+        "use" : "@vercel/python",
+        "config" : { "maxLambdaSize" : "15mb", "runtime": "python3.9" }
+    }],
+
+    "routes" : [
+
+      { 
+
+        "src" : "/(.*)", 
+        "dest" : "cado/wsgi.py"
+
+    }
+
     ]
-  }
-  
+}
